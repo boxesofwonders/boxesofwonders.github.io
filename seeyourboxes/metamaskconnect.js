@@ -2,7 +2,7 @@ const btnConnect = document.getElementById('connect-button')
 const lAccount = document.getElementById('account')
 const lBalance = document.getElementById('balance')
 
-const POLYGON_MAINNET = utils.hexValue(137) // '0x89'
+const POLYGON_MAINNET = 0x89 //137
 
 const isMetaMaskInstalled = () => {
     const { ethereum } = window
@@ -20,7 +20,7 @@ const isPolygonNetwork = async () => {
         method: 'eth_chainId',
     })
 
-    return Boolean(utils.hexValue(chainId) == POLYGON_MAINNET)
+    return Boolean(chainId == POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
