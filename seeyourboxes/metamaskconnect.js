@@ -14,18 +14,18 @@ const setLabels = async (sAccount, sBalance) => {
     lBalance.textContent = sBalance
 }
 
-const isPolygonNetwork = () => {
+const isPolygonNetwork = async () => {
      
-    const chainId = ethereum.request({
+    const chainId = await ethereum.request({
         method: 'eth_chainId',
     })
 
-    return chainId === POLYGON_MAINNET
+    return Boolean(chainId === POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
     try {
-        if(isPolygonNetwork()){
+        if(await isPolygonNetwork()){
             const accounts = await ethereum.request({
                 method: 'eth_requestAccounts',
             })
