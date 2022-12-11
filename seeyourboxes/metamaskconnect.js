@@ -2,6 +2,16 @@ const btnConnect = document.getElementById('connect-button')
 const lAccount = document.getElementById('account')
 const lBalance = document.getElementById('balance')
 
+const networkMap = {
+    POLYGON_MAINNET: {
+      chainId: utils.hexValue(137), // '0x89'
+      chainName: "Matic(Polygon) Mainnet", 
+      nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+      rpcUrls: ["https://polygon-rpc.com"],
+      blockExplorerUrls: ["https://www.polygonscan.com/"],
+    }
+  };
+
 const isMetaMaskInstalled = () => {
     const { ethereum } = window
     return Boolean(ethereum && ethereum.isMetaMask)
@@ -17,16 +27,8 @@ const isPolygonNetwork = async () => {
     const chainId = await ethereum.request({
         method: 'eth_chainId',
     })
-    console.error(chainId)
-    const testChain = chainId == 'https://polygon-rpc.com'
 
-    const networkId = await ethereum.request({
-        method: 'net_version',
-    })
-    console.error(networkId)
-    const testNetwork = networkId == 137
-
-    return testChain && testNetwork
+    return Boolean(utils.hexValue(chainId) == networkMap.POLYGON_MAINNET.chainId)
 }
 
 const onClickConnect = async () => {
