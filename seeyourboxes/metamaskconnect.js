@@ -39,7 +39,7 @@ const onClickConnect = async () => {
 
             ethereum.request({method: 'eth_getBalance', params:[account, 'latest']}).then(result => {
                 const balance = parseInt(result,16) / (10**18);
-                lBalance.textContent = balance + ' MATIC';
+                setLabels(account, balance + ' MATIC')
             });
         } else {
             setLabels('Switch to Polygon network', '')
