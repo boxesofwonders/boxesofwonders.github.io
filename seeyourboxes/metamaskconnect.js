@@ -14,9 +14,9 @@ const setLabels = async (sAccount, sBalance) => {
     lBalance.textContent = sBalance
 }
 
-const isPolygonNetwork = async () => {
+const isPolygonNetwork = () => {
      
-    const chainId = await ethereum.request({
+    const chainId = ethereum.request({
         method: 'eth_chainId',
     })
 
