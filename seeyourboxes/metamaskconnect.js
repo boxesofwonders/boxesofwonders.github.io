@@ -3,13 +3,7 @@ const lAccount = document.getElementById('account')
 const lBalance = document.getElementById('balance')
 
 const networkMap = {
-    POLYGON_MAINNET: {
-      chainId: utils.hexValue(137), // '0x89'
-      chainName: "Matic(Polygon) Mainnet", 
-      nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-      rpcUrls: ["https://polygon-rpc.com"],
-      blockExplorerUrls: ["https://www.polygonscan.com/"],
-    }
+    POLYGON_MAINNET: utils.hexValue(137), // '0x89'
   };
 
 const isMetaMaskInstalled = () => {
