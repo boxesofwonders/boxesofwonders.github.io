@@ -3,7 +3,7 @@ const lAccount = document.getElementById('account')
 const lBalance = document.getElementById('balance')
 
 const networkMap = {
-    POLYGON_MAINNET: utils.hexValue(137), // '0x89'
+    'POLYGON_MAINNET': utils.hexValue(137), // '0x89'
   };
 
 const isMetaMaskInstalled = () => {
@@ -22,7 +22,7 @@ const isPolygonNetwork = async () => {
         method: 'eth_chainId',
     })
 
-    return Boolean(utils.hexValue(chainId) == networkMap.POLYGON_MAINNET.chainId)
+    return Boolean(utils.hexValue(chainId) == networkMap.POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
