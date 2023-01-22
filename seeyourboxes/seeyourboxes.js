@@ -26,7 +26,7 @@ const onClickConnect = async () => {
             })
             const account = accounts[0]
 
-            const web3 = new Web3(ethereum)
+            let web3 = new Web3(ethereum)
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
