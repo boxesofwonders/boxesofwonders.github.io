@@ -7,7 +7,6 @@ const POLYGON_MAINNET = '0x89' //137
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = () => {
-    const ethereum = window.ethereum
     return Boolean(ethereum && ethereum.isMetaMask)
 }
 
@@ -26,7 +25,7 @@ const onClickConnect = async () => {
             })
             const account = accounts[0]
 
-            const web3 = new Web3(ethereum);
+            const web3 = new Web3(ethereum)
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
