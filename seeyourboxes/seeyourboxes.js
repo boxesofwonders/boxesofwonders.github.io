@@ -1,4 +1,5 @@
 import boxesofwonders_tokenABI from "./boxesofwonders_token.js"
+import Web3 from 'web3';
 
 const btnConnect = document.getElementById('connect-button')
 const lMessage = document.getElementById('message')
@@ -7,7 +8,6 @@ const POLYGON_MAINNET = '0x89' //137
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = () => {
-    const Web3 = require('web3')
     const web3 = new Web3(window.ethereum)
     return Boolean(typeof web3 !== 'undefined' && web3.currentProvider.isMetaMask === true)
 }
