@@ -1,5 +1,4 @@
 import boxesofwonders_tokenABI from "./boxesofwonders_token.js"
-import Web3 from 'web3';
 
 const btnConnect = document.getElementById('connect-button')
 const lMessage = document.getElementById('message')
@@ -8,8 +7,8 @@ const POLYGON_MAINNET = '0x89' //137
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = () => {
-    const web3 = new Web3(window.ethereum)
-    return Boolean(typeof web3 !== 'undefined' && web3.currentProvider.isMetaMask === true)
+    const { ethereum } = window
+    return Boolean(ethereum && ethereum.isMetaMask)
 }
 
 const isPolygonNetwork = async () => {
@@ -18,6 +17,8 @@ const isPolygonNetwork = async () => {
 
 const onClickConnect = async () => {
     try {
+        const web3 = new Web3(ethereum)
+
         if(await isPolygonNetwork()){
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             const account = web3.eth.accounts[0]
