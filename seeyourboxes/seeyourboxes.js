@@ -12,16 +12,21 @@ const isMetaMaskInstalled = () => {
 }
 
 const isPolygonNetwork = async () => {
-    return Boolean(web3.eth.getChainId() === POLYGON_MAINNET)
+    const chainId = await ethereum.request({
+        method: 'eth_chainId',
+    })
+    return Boolean(chainId === POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
     try {
-        const web3 = new Web3(window.ethereum)
+        if(await isPolygonNetwork()){
+            const accounts = await ethereum.request({
+                method: 'eth_requestAccounts',
+            })
+            const account = accounts[0]
 
-        if(typeof web3 !== 'undefined' && await isPolygonNetwork()){
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
-            const account = web3.eth.accounts[0]
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
 
@@ -50,12 +55,12 @@ const onClickConnect = async () => {
 }
   
 const initialize = async () => {
-    if(!isMetaMaskInstalled()){
-        lMessage.textContent = 'Metamask extension not installed'
-        btnConnect.onclick = null
-    } else {
+    if(isMetaMaskInstalled()){
         lMessage.textContent = ''
         btnConnect.onclick = onClickConnect
+    } else {
+        lMessage.textContent = 'Metamask extension not installed'
+        btnConnect.onclick = null
     }
 }
 
