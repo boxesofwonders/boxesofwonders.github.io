@@ -17,9 +17,9 @@ const isPolygonNetwork = async () => {
 
 const onClickConnect = async () => {
     try {
-        const web3 = new Web3(ethereum)
+        const web3 = new Web3(window.ethereum)
 
-        if(await isPolygonNetwork()){
+        if(typeof web3 !== 'undefined' && await isPolygonNetwork()){
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             const account = web3.eth.accounts[0]
             contract.defaultAccount = account
