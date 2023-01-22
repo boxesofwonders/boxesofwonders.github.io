@@ -7,7 +7,7 @@ const POLYGON_MAINNET = '0x89' //137
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = () => {
-    const web3 = new Web3(windows.ethereum)
+    const web3 = new Web3(window.ethereum)
     return Boolean(typeof web3 !== 'undefined' && web3.currentProvider.isMetaMask === true)
 }
 
