@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-expand bg-light">
@@ -49,13 +50,21 @@
             <br><br><br>
             <div class="row">
                 <div class="col text-center">
-                    <label id="account"></label>
-                    <br>
-                    <label id="balance"></label>
+                    <label id="message"></label>
                 </div>
+                <div id="nfts" class="flex gap-7 flex-wrap"></div>
             </div>
         </div>
+
+        <template id="nft_template">
+            <section>
+                <h1 class="font-bold text-center rounded-t-md"></h1>
+                <a href="" target="_black">
+                    <img class="rounded-b-md w-40 h-40" src="" alt="">
+                </a>
+            </section>
+        </template>
         
-        <script type="text/javascript" src="./metamaskconnect.js"></script>
+        <script type="module" src="./seeyourboxes.js"></script>
     </body>
 </html>
