@@ -13,10 +13,9 @@ const isMetaMaskInstalled = async () => {
             const accounts = await window.provider.request({
                 method: "eth_requestAccounts",
             });
-            console.log(accounts) //TO DELETE
-            return true
+            return Boolean(accounts[0])
         } catch (error) {
-            console.log(error) //TO DELETE
+            console.log(error)
         }
     }
     return false
@@ -24,6 +23,9 @@ const isMetaMaskInstalled = async () => {
 
 const isPolygonNetwork = async () => {
     const chainId = await window.web3.eth.getChainId()
+    console.log(chainId) //TO DELETE
+    console.log(chainId === POLYGON_MAINNET) //TO DELETE
+    console.log(Boolean(chainId && chainId === POLYGON_MAINNET)) //TO DELETE
     return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
@@ -40,6 +42,7 @@ const onClickConnect = async () => {
             const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             console.log(contract) //TO DELETE
             contract.defaultAccount = account
+            console.log(contract.defaultAccount) //TO DELETE
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
             console.log(numberOfBoxes) //TO DELETE
 
