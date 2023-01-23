@@ -8,7 +8,18 @@ const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = async () => {
     window.provider = await detectEthereumProvider()
-    return Boolean(window.provider)
+    if(window.provider){
+        try {
+            const accounts = await window.provider.request({
+                method: "eth_requestAccounts",
+            });
+            console.log(accounts) //TO DELETE
+            return true
+        } catch (error) {
+            console.log(error) //TO DELETE
+        }
+    }
+    return false
 }
 
 const isPolygonNetwork = async () => {
