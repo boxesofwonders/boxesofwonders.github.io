@@ -3,19 +3,17 @@ import boxesofwonders_tokenABI from "./boxesofwonders_token.js"
 const btnConnect = document.getElementById('connect-button')
 const lMessage = document.getElementById('message')
 
-const POLYGON_MAINNET = '0x89' //137
+const POLYGON_MAINNET = 137 //'0x89'
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
-const isMetaMaskInstalled = () => {
-    const { ethereum } = window
-    return Boolean(ethereum && ethereum.isMetaMask)
+const isMetaMaskInstalled = async () => {
+    const provider = await detectEthereumProvider()
+    return Boolean(provider)
 }
 
 const isPolygonNetwork = async () => {
-    const chainId = await ethereum.request({
-        method: 'eth_chainId',
-    })
-    return Boolean(chainId === POLYGON_MAINNET)
+    const chainId = await web3.eth.getChainId()
+    return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
@@ -26,7 +24,6 @@ const onClickConnect = async () => {
             })
             const account = accounts[0]
 
-            let web3 = new Web3(ethereum)
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
@@ -56,7 +53,8 @@ const onClickConnect = async () => {
 }
   
 const initialize = async () => {
-    if(isMetaMaskInstalled()){
+    if(await isMetaMaskInstalled()){
+        const web3 = new Web3(provider)
         lMessage.textContent = ''
         btnConnect.onclick = onClickConnect
     } else {
