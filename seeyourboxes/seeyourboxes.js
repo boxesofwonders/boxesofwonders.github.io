@@ -19,9 +19,7 @@ const isPolygonNetwork = async () => {
 const onClickConnect = async () => {
     try {
         if(await isPolygonNetwork()){
-            const accounts = await ethereum.request({
-                method: 'eth_requestAccounts',
-            })
+            const accounts = await web3.eth.getAccounts()
             const account = accounts[0]
 
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
