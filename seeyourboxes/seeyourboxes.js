@@ -7,22 +7,22 @@ const POLYGON_MAINNET = 137 //'0x89'
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = async () => {
-    const provider = await detectEthereumProvider()
-    return Boolean(provider)
+    window.provider = await detectEthereumProvider()
+    return Boolean(window.provider)
 }
 
 const isPolygonNetwork = async () => {
-    const chainId = await web3.eth.getChainId()
+    const chainId = await window.web3.eth.getChainId()
     return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
     try {
         if(await isPolygonNetwork()){
-            const accounts = await web3.eth.getAccounts()
+            const accounts = await window.web3.eth.getAccounts()
             const account = accounts[0]
 
-            const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
+            const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
 
@@ -55,7 +55,7 @@ const onClickConnect = async () => {
   
 const initialize = async () => {
     if(await isMetaMaskInstalled()){
-        const web3 = new Web3(provider)
+        window.web3 = new Web3(window.provider)
         lMessage.textContent = ''
         btnConnect.onclick = onClickConnect
     } else {
