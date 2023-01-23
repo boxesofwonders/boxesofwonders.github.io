@@ -36,11 +36,14 @@ const onClickConnect = async () => {
 
                 const boxMetadata = await fetch(boxMetadataURI).then((response) => response.json())
                 
-                const boxElement = document.getElementById("nft_template").content.cloneNode(true)
-                boxElement.querySelector("h1").innerText = boxMetadata['name']
-                boxElement.querySelector("a").href = `https://opensea.io/assets/matic/${BOXES_OF_WONDERS_CONTRACT}/${boxId}`
-                boxElement.querySelector("img").src = boxMetadata['image']
-                boxElement.querySelector("img").alt = boxMetadata['description']
+                const boxName = boxMetadata['name']
+                if(boxName.startsWith('Box of Wonder')){
+                    const boxElement = document.getElementById("nft_template").content.cloneNode(true)
+                    boxElement.querySelector("h1").innerText = boxName
+                    boxElement.querySelector("a").href = `https://opensea.io/assets/matic/${BOXES_OF_WONDERS_CONTRACT}/${boxId}`
+                    boxElement.querySelector("img").src = boxMetadata['image']
+                    boxElement.querySelector("img").alt = boxMetadata['description']
+                }
             }
         } else {
             lMessage.textContent = 'Switch to Polygon network'
