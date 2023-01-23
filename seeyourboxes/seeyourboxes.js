@@ -18,23 +18,34 @@ const isPolygonNetwork = async () => {
 
 const onClickConnect = async () => {
     try {
+        console.log(provider) //TO DELETE
+        console.log(web3) //TO DELETE
         if(await isPolygonNetwork()){
             const accounts = await window.web3.eth.getAccounts()
+            console.log(accounts) //TO DELETE
             const account = accounts[0]
+            console.log(account) //TO DELETE
 
             const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
+            console.log(contract) //TO DELETE
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
+            console.log(numberOfBoxes) //TO DELETE
 
             for(let i = 0; i < numberOfBoxes; i++){
+                console.log(i) //TO DELETE
                 const boxId = await contract.methods.tockenOfOwnerByIndex(account, i).call()
+                console.log(boxId) //TO DELETE
                 let boxMetadataURI = await contract.methods.tokenURI(boxId).call()
+                console.log(boxMetadataURI) //TO DELETE
 
                 if(boxMetadataURI.startsWith("ipfs://")){
                     boxMetadataURI = `https://ipfs.io/ipfs/${boxMetadataURI.split("ipfs://")[1]}`
                 }
+                console.log(boxMetadataURI) //TO DELETE
 
                 const boxMetadata = await fetch(boxMetadataURI).then((response) => response.json())
+                console.log(boxMetadata) //TO DELETE
                 
                 const boxName = boxMetadata['name']
                 if(boxName.startsWith('Box of Wonder')){
