@@ -3,30 +3,25 @@ import boxesofwonders_tokenABI from "./boxesofwonders_token.js"
 const btnConnect = document.getElementById('connect-button')
 const lMessage = document.getElementById('message')
 
-const POLYGON_MAINNET = '0x89' //137
+const POLYGON_MAINNET = 137 //'0x89'
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
-const isMetaMaskInstalled = () => {
-    const { ethereum } = window
-    return Boolean(ethereum && ethereum.isMetaMask)
+const isMetaMaskInstalled = async () => {
+    const provider = await detectEthereumProvider()
+    return Boolean(provider)
 }
 
 const isPolygonNetwork = async () => {
-    const chainId = await ethereum.request({
-        method: 'eth_chainId',
-    })
-    return Boolean(chainId === POLYGON_MAINNET)
+    const chainId = await web3.eth.getChainId()
+    return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
     try {
         if(await isPolygonNetwork()){
-            const accounts = await ethereum.request({
-                method: 'eth_requestAccounts',
-            })
+            const accounts = await web3.eth.getAccounts()
             const account = accounts[0]
 
-            let web3 = new Web3(ethereum)
             const contract = new web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
             const numberOfBoxes = await contract.methods.balanceOf(account).call()
@@ -41,11 +36,14 @@ const onClickConnect = async () => {
 
                 const boxMetadata = await fetch(boxMetadataURI).then((response) => response.json())
                 
-                const boxElement = document.getElementById("nft_template").content.cloneNode(true)
-                boxElement.querySelector("h1").innerText = boxMetadata['name']
-                boxElement.querySelector("a").href = `https://opensea.io/assets/matic/${BOXES_OF_WONDERS_CONTRACT}/${boxId}`
-                boxElement.querySelector("img").src = boxMetadata['image']
-                boxElement.querySelector("img").alt = boxMetadata['description']
+                const boxName = boxMetadata['name']
+                if(boxName.startsWith('Box of Wonder')){
+                    const boxElement = document.getElementById("nft_template").content.cloneNode(true)
+                    boxElement.querySelector("h1").innerText = boxName
+                    boxElement.querySelector("a").href = `https://opensea.io/assets/matic/${BOXES_OF_WONDERS_CONTRACT}/${boxId}`
+                    boxElement.querySelector("img").src = boxMetadata['image']
+                    boxElement.querySelector("img").alt = boxMetadata['description']
+                }
             }
         } else {
             lMessage.textContent = 'Switch to Polygon network'
@@ -56,7 +54,8 @@ const onClickConnect = async () => {
 }
   
 const initialize = async () => {
-    if(isMetaMaskInstalled()){
+    if(await isMetaMaskInstalled()){
+        const web3 = new Web3(provider)
         lMessage.textContent = ''
         btnConnect.onclick = onClickConnect
     } else {
