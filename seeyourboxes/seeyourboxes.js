@@ -23,27 +23,19 @@ const isMetaMaskInstalled = async () => {
 
 const isPolygonNetwork = async () => {
     const chainId = await window.web3.eth.getChainId()
-    console.log(chainId) //TO DELETE
-    console.log(chainId === POLYGON_MAINNET) //TO DELETE
-    console.log(Boolean(chainId && chainId === POLYGON_MAINNET)) //TO DELETE
     return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
 const onClickConnect = async () => {
     try {
-        console.log(provider) //TO DELETE
-        console.log(web3) //TO DELETE
         if(await isPolygonNetwork()){
             const accounts = await window.web3.eth.getAccounts()
-            console.log(accounts) //TO DELETE
             const account = accounts[0]
-            console.log(account) //TO DELETE
 
             const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
-            console.log(contract) //TO DELETE
             contract.defaultAccount = account
-            console.log(contract.defaultAccount) //TO DELETE
-            const numberOfBoxes = await contract.methods.balanceOf(account).call()
+            console.log(account) //TO DELETE
+            const numberOfBoxes = await contract.methods.balanceOf(account, 1).call()
             console.log(numberOfBoxes) //TO DELETE
 
             for(let i = 0; i < numberOfBoxes; i++){
@@ -74,6 +66,7 @@ const onClickConnect = async () => {
             lMessage.textContent = 'Switch to Polygon network'
         }
     } catch (error) {
+        console.log(error)
         lMessage.textContent = 'Connection error'
     }
 }
