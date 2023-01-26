@@ -35,7 +35,7 @@ const onClickConnect = async () => {
             const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
             console.log(account) //TO DELETE
-            const numberOfBoxes = await contract.methods.balanceOf(account, 1).call()
+            const numberOfBoxes = await contract.methods.balanceOf(account, 0).call()
             console.log(numberOfBoxes) //TO DELETE
 
             for(let i = 0; i < numberOfBoxes; i++){
