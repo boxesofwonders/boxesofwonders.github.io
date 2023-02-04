@@ -1,7 +1,12 @@
 import boxesofwonders_tokenABI from "./boxesofwonders_token.js"
+import tokenIDs from "./boxesofwonders_tokenIDs.js"
 
 const btnConnect = document.getElementById('connect-button')
 const lMessage = document.getElementById('message')
+const spinner = document.getElementById('spinner')
+
+const template = document.getElementById("nft_template")
+const nfts = document.getElementById("nfts")
 
 const POLYGON_MAINNET = 137 //'0x89'
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
@@ -26,7 +31,23 @@ const isPolygonNetwork = async () => {
     return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
+const removeAllNfts = () => {
+    const countNfts = nfts.childElementCount
+    for(let i=0; i<countNfts; i++){
+        nfts.removeChild(nfts.lastElementChild)
+    }
+}
+
+const adaptIpfsUri = (uri) => {
+    if(uri.startsWith("ipfs://")){
+        uri = `https://ipfs.io/ipfs/${uri.split("ipfs://")[1]}`
+    }
+    return uri
+}
+
 const onClickConnect = async () => {
+    removeAllNfts()
+    spinner.style.visibility='visible'
     try {
         if(await isPolygonNetwork()){
             const accounts = await window.web3.eth.getAccounts()
@@ -34,33 +55,33 @@ const onClickConnect = async () => {
 
             const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
             contract.defaultAccount = account
-            console.log(account) //TO DELETE
-            const numberOfBoxes = await contract.methods.balanceOf(account, 0).call()
-            console.log(numberOfBoxes) //TO DELETE
 
-            for(let i = 0; i < numberOfBoxes; i++){
-                console.log(i) //TO DELETE
-                const boxId = await contract.methods.tockenOfOwnerByIndex(account, i).call()
-                console.log(boxId) //TO DELETE
-                let boxMetadataURI = await contract.methods.tokenURI(boxId).call()
-                console.log(boxMetadataURI) //TO DELETE
+            var countBoxes = 0
+            for(let i = 0; i < tokenIDs.length; i++){
+                const boxTokenID = tokenIDs[i]
+                const boxFound = await contract.methods.balanceOf(account, boxTokenID).call()
+            
+                if(boxFound>0){
+                    countBoxes++
+                    let boxMetadataURI = await contract.methods.uri(boxTokenID).call()
+                    const boxMetadata = await fetch(adaptIpfsUri(boxMetadataURI)).then((response) => response.json())
+                    
+                    const boxElement = template.content.cloneNode(true)
+                    boxElement.querySelector("p").innerText = boxMetadata['name']
+                    boxElement.querySelector("a").href = `https://opensea.io/assets/matic/${BOXES_OF_WONDERS_CONTRACT}/${boxTokenID}`
+                    boxElement.querySelector("img").src = adaptIpfsUri(boxMetadata['image_url'])
+                    boxElement.querySelector("img").alt = boxMetadata['name']
 
-                if(boxMetadataURI.startsWith("ipfs://")){
-                    boxMetadataURI = `https://ipfs.io/ipfs/${boxMetadataURI.split("ipfs://")[1]}`
+                    nfts.append(boxElement)
+                } else {
+                    console.log(boxTokenID)
                 }
-                console.log(boxMetadataURI) //TO DELETE
+            }
 
-                const boxMetadata = await fetch(boxMetadataURI).then((response) => response.json())
-                console.log(boxMetadata) //TO DELETE
-                
-                const boxName = boxMetadata['name']
-                if(boxName.startsWith('Box of Wonder')){
-                    const boxElement = document.getElementById("nft_template").content.cloneNode(true)
-                    boxElement.querySelector("h1").innerText = boxName
-                    boxElement.querySelector("a").href = `https://opensea.io/assets/matic/${BOXES_OF_WONDERS_CONTRACT}/${boxId}`
-                    boxElement.querySelector("img").src = boxMetadata['image']
-                    boxElement.querySelector("img").alt = boxMetadata['description']
-                }
+            if(countBoxes>0){
+                lMessage.textContent = ''
+            } else {
+                lMessage.textContent = 'You don\'t have any Box yet, let\'s go buy one!'
             }
         } else {
             lMessage.textContent = 'Switch to Polygon network'
@@ -69,6 +90,7 @@ const onClickConnect = async () => {
         console.log(error)
         lMessage.textContent = 'Connection error'
     }
+    spinner.style.visibility='hidden'
 }
   
 const initialize = async () => {

@@ -53,17 +53,20 @@
                 <div class="col text-center">
                     <label id="message"></label>
                 </div>
-                <div id="nfts" class="flex gap-7 flex-wrap"></div>
+            </div>
+            <div id="nfts" class="row"></div>
+            <div id="spinner" class="text-center" style="visibility:hidden;">
+                <span class="spinner-grow" role="status"></span>
             </div>
         </div>
 
         <template id="nft_template">
-            <section>
-                <h1 class="font-bold text-center rounded-t-md"></h1>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center mb-5">
+                <p class="display-4"></p>
                 <a href="" target="_black">
-                    <img class="rounded-b-md w-40 h-40" src="" alt="">
+                    <img style="max-width: 20em; width:100%;" src="" alt="">
                 </a>
-            </section>
+            </div>
         </template>
         
         <script type="module" src="./seeyourboxes.js"></script>
