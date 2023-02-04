@@ -54,6 +54,7 @@ const onClickConnect = async () => {
             const account = accounts[0]
 
             const contract = new window.web3.eth.Contract(boxesofwonders_tokenABI, BOXES_OF_WONDERS_CONTRACT)
+            contract.defaultCommon = {customChain: {name: 'Polygon Mainnet', chainId: POLYGON_MAINNET, networkId: POLYGON_MAINNET}};
             contract.defaultAccount = account
 
             var countBoxes = 0
@@ -73,8 +74,6 @@ const onClickConnect = async () => {
                     boxElement.querySelector("img").alt = boxMetadata['name']
 
                     nfts.append(boxElement)
-                } else {
-                    console.log(boxTokenID)
                 }
             }
 
