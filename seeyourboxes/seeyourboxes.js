@@ -46,6 +46,8 @@ const adaptIpfsUri = (uri) => {
 }
 
 const onClickConnect = async () => {
+    btnConnect.onclick = null
+    lMessage.textContent = ''
     removeAllNfts()
     spinner.style.visibility='visible'
     try {
@@ -65,7 +67,9 @@ const onClickConnect = async () => {
                 if(boxFound>0){
                     countBoxes++
                     let boxMetadataURI = await contract.methods.uri(boxTokenID).call()
-                    const boxMetadata = await fetch(adaptIpfsUri(boxMetadataURI)).then((response) => response.json())
+                    boxMetadataURI = adaptIpfsUri(boxMetadataURI)
+                    const response = await fetch(boxMetadataURI)
+                    const boxMetadata = await response.json()
                     
                     const boxElement = template.content.cloneNode(true)
                     boxElement.querySelector("p").innerText = boxMetadata['name']
@@ -77,9 +81,7 @@ const onClickConnect = async () => {
                 }
             }
 
-            if(countBoxes>0){
-                lMessage.textContent = ''
-            } else {
+            if(countBoxes<1){
                 lMessage.textContent = 'You don\'t have any Box yet, let\'s go buy one!'
             }
         } else {
@@ -90,6 +92,7 @@ const onClickConnect = async () => {
         lMessage.textContent = 'Connection error'
     }
     spinner.style.visibility='hidden'
+    btnConnect.onclick = onClickConnect
 }
   
 const initialize = async () => {
