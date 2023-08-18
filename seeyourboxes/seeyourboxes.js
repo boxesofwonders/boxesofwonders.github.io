@@ -8,7 +8,7 @@ const spinner = document.getElementById('spinner')
 const template = document.getElementById("nft_template")
 const nfts = document.getElementById("nfts")
 
-const POLYGON_MAINNET = 137 //'0x89'
+const POLYGON_MAINNET = 137n //'0x89'
 const BOXES_OF_WONDERS_CONTRACT = '0x2953399124F0cBB46d2CbACD8A89cF0599974963'
 
 const isMetaMaskInstalled = async () => {
@@ -28,7 +28,7 @@ const isMetaMaskInstalled = async () => {
 
 const isPolygonNetwork = async () => {
     const chainId = await window.web3.eth.getChainId()
-    return Boolean(chainId && chainId === POLYGON_MAINNET)
+        return Boolean(chainId && chainId === POLYGON_MAINNET)
 }
 
 const removeAllNfts = () => {
